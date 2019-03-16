@@ -1,0 +1,78 @@
+---
+title: "GDP total"
+author: "Ashton Pallottini"
+date: "March 7, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, warning=FALSE}
+library(tidyverse)
+library(stringr)
+```
+
+
+```{r}
+gdp.data <- read.csv('total.data.csv', header = T, na.strings = "", stringsAsFactors = F)
+gdp.data <- as.tibble(gdp.data)
+gdp.data
+```
+
+```{r}
+colnames(gdp.data) <- c("country.name", "indicator.name", 1961:2016)
+gdp.data
+```
+
+```{r}
+data.matrix <- matrix(nrow = 14784, ncol = 3)
+data.tib <- as.tibble(data.matrix)
+colnames(data.tib) <- c("Country Name", "Year", "GDP")
+
+i <- 1
+while(i < 14785){
+  for(j in 3:58){
+    data.tib[i,2] <- colnames(gdp.data)[j]
+    i <- i + 1
+  }
+}
+```
+
+```{r}
+i <- 1
+j <- 1
+x <- 1
+while(i < 14785){
+  while(j < 57){
+    data.tib[i,1] <- gdp.data[x,1]
+    j <- j + 1
+    i <- i + 1
+  }
+  j <- 1
+  x <- x + 1
+}
+data.tib
+```
+
+```{r}
+i <- 1
+j <- 1
+x <- 1
+while(i < 14785){
+  for(j in 3:58){
+    data.tib[i,3] <- gdp.data[x,j]
+    i <- i + 1
+  }
+  x <- x + 1
+}
+data.tib[14784,]
+```
+
+```{r}
+clean.data <- as.data.frame(data.tib)
+write.csv(clean.data, "gdp.clean.data.csv")
+```
+.
